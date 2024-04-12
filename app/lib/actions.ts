@@ -12,17 +12,14 @@ export async function login(formData: FormData) {
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
-  const data = {
+  const { error } = await supabase.auth.signInWithPassword({
     email: formData.get('email') as string,
     password: formData.get('password') as string,
-  }
-
-  const { error } = await supabase.auth.signInWithPassword(data)
-
-  console.log(error)
+  })
 
   if (error) {
-    redirect('/error')
+    console.log(error)
+    throw error;
   }
 
   revalidatePath('/', 'layout')
@@ -34,19 +31,19 @@ export async function signup(formData: FormData) {
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
-  const data = {
+  const { data, error } = await supabase.auth.signUp({
     email: formData.get('email') as string,
     password: formData.get('password') as string,
-  }
-
-  console.log({data});
-
-  const { error } = await supabase.auth.signUp(data)
-
-  console.log({error})
+  })
 
   if (error) {
-    redirect('/error')
+    console.log(error)
+    throw error;
+  }
+
+  if (!data.user?.identities?.length) {
+    console.log('User already exists');
+    throw new Error('Email already in use. Sign up instead');
   }
 
   revalidatePath('/', 'layout')
@@ -60,10 +57,9 @@ export async function logout(formData: FormData) {
 
   const { error } = await supabase.auth.signOut()
 
-  console.log(error)
-
   if (error) {
-    redirect('/error')
+    console.log(error)
+    throw error;
   }
 
   revalidatePath('/', 'layout')
