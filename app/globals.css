@@ -26,6 +26,11 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+input {
+  background: inherit;
+  border: 1px solid currentColor;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
