@@ -1,21 +1,22 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/server';
 
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
 
-import {logout} from './lib/actions'
+import { logout } from './lib/actions';
 
-import "./globals.css";
+import './globals.css';
 
 export async function generateMetadata() {
-  const supabase = createClient()
-  const { data, error } = await supabase.auth.getUser()
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
 
   return {
-    title: (error || !data?.user) ? 'Expense Manager' : 'Dashboard | Expense Manager',
-    description: "Manage expenses and create reports",
-  }
+    title:
+      error || !data?.user ? 'Expense Manager' : 'Dashboard | Expense Manager',
+    description: 'Manage expenses and create reports',
+  };
 }
 
 export default async function RootLayout({
@@ -23,8 +24,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = createClient()
-  const { data, error } = await supabase.auth.getUser()
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
 
   return (
     <html lang="en">
@@ -40,20 +41,26 @@ export default async function RootLayout({
                   width={24}
                   height={24}
                   priority
-                  />
+                />
                 Expense manager
               </Link>
             </li>
-            <li className='ml-auto'>
-              {(error || !data?.user) ? (
+            <li className="ml-auto">
+              {error || !data?.user ? (
                 <>
-                  <Link href={'/login'} className='text-sm underline'>Log In</Link>
-                  {' '}or {' '}
-                  <Link href={'/signup'} className='text-sm underline'>Sign Up</Link>
+                  <Link href={'/login'} className="text-sm underline">
+                    Log In
+                  </Link>{' '}
+                  or{' '}
+                  <Link href={'/signup'} className="text-sm underline">
+                    Sign Up
+                  </Link>
                 </>
               ) : (
                 <form>
-                  <button className='text-sm underline' formAction={logout}>Logout</button>
+                  <button className="text-sm underline" formAction={logout}>
+                    Logout
+                  </button>
                 </form>
               )}
             </li>
