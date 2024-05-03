@@ -55,11 +55,18 @@ export async function logout(formData: FormData) {
   // use the client defined in @/utils/supabase/server.ts.
   const supabase = createClient();
 
-  const { error } = await supabase.auth.signOut();
+  // Check if a user's logged in
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (error) {
-    console.log(error);
-    throw error;
+  if (user) {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   revalidatePath('/', 'layout');
