@@ -45,6 +45,20 @@ export default async function RootLayout({
                 Expense manager
               </Link>
             </li>
+            <li>
+              <Link href="/report" className="flex items-center gap-2 text-sm">
+                Report
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/expense/new"
+                className="flex items-center gap-2 text-sm"
+              >
+                Add expense
+              </Link>
+            </li>
+
             <li className="ml-auto">
               {error || !data?.user ? (
                 <>

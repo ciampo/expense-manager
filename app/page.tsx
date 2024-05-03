@@ -2,6 +2,8 @@ import { createClient } from '@/utils/supabase/server';
 
 import Link from 'next/link';
 
+import ExpensesList from './expense/expenses-list';
+
 export default async function Home() {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
@@ -19,6 +21,7 @@ export default async function Home() {
             Log In
           </Link>
         </p>
+        {error ? <p>{error.message}</p> : null}
       </main>
     );
   }
@@ -27,6 +30,9 @@ export default async function Home() {
     <main className="min-h-dvh">
       <h1>Dashboard</h1>
       <p>Hello {data.user.email}</p>
+      <h2>Expenses</h2>
+      {/* TODO: use suspense */}
+      <ExpensesList userId={data.user.id} />
     </main>
   );
 }

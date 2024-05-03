@@ -41,3 +41,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - Framework: Next.JS
 - Database, Authentication, Storage: Supabase
 - Email Custom SMPT: resend
+
+## TODO
+
+[Tutorial](https://supabase.com/docs/guides/getting-started/tutorials/with-nextjs?queryGroups=language&language=ts#proof-key-for-code-exchange-pkce)
