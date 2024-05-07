@@ -85,7 +85,7 @@ export default async function RootLayout({
                 </li>
               </ul>
             </nav>
-            <main className="pt-12 min-h-dvh">{children}</main>
+            <main className="pt-12 min-h-dvh px-2">{children}</main>
             <div
               id="popover-profile"
               className="fixed inset-auto top-12 right-0 p-3 bg-white text-blue-800"

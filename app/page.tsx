@@ -39,10 +39,18 @@ export default async function Home() {
   }
 
   return (
-    <>
-      <h1>Dashboard</h1>
+    <section className="max-w-screen-lg mx-auto pt-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-blue-800 text-3xl">Dashboard</h1>
+        <Link
+          className="px-4 py-2 bg-blue-800 text-white underline-offset-2 hover:bg-blue-700 hover:underline focus:bg-blue-700 focus:underline"
+          href="/expense/new"
+        >
+          Add expense
+        </Link>
+      </div>
       {/* TODO: use suspense */}
       <ExpensesList userId={data.user.id} />
-    </>
+    </section>
   );
 }

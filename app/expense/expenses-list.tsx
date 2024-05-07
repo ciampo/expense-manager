@@ -75,60 +75,84 @@ export default function ExpensesList({ userId }: { userId: string }) {
   }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Date</th>
-          <th scope="col">Merchant</th>
-          <th scope="col">Amount</th>
-          <th scope="col">Category</th>
-          <th scope="col">Attachment</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        {expensesData.map((expense, i) => {
-          // TODO: check it's an image
-          const attachmentHasImageExtension =
-            /\.(gif|jpe?g|tiff?|png|webp|bmp|heic)$/i.test(
-              expense.attachment ?? ''
-            );
-          const attachmentUrl = attachmentUrls.get(`${expense.id}`);
-          return (
-            <tr key={expense.id}>
-              <td>{expense.date}</td>
-              <td>{expense.merchant_name}</td>
-              <td>{expense.amount}</td>
-              <td>{expense.category}</td>
-              {/* TODO: optimize resize */}
-              <td>
-                {attachmentUrl && attachmentHasImageExtension ? (
-                  <Image
-                    width={0}
-                    height={0}
-                    src={attachmentUrl}
-                    alt="expense attachment"
-                    className="w-12 h-auto"
-                  />
-                ) : attachmentUrl && expense.attachment ? (
+    <div className="w-full overflow-x-auto">
+      <table className="w-full" style={{ minWidth: '40rem' }}>
+        <thead className="sticky t-12">
+          <tr className="bg-blue-800 text-white text-left">
+            <th scope="col" className="p-2">
+              Date
+            </th>
+            <th scope="col" className="p-2">
+              Merchant
+            </th>
+            <th scope="col" className="p-2">
+              Amount
+            </th>
+            <th scope="col" className="p-2">
+              Category
+            </th>
+            <th scope="col" className="p-2">
+              Attachment
+            </th>
+            <th scope="col" className="p-2">
+              Edit
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {expensesData.map((expense, i) => {
+            // TODO: check it's an image
+            const attachmentIsImage =
+              /\.(gif|jpe?g|tiff?|png|webp|bmp|heic)$/i.test(
+                expense.attachment ?? ''
+              );
+            const attachmentUrl = attachmentUrls.get(`${expense.id}`);
+            return (
+              <tr
+                className={`border-b border-b-blue-900 ${i % 2 === 0 && 'bg-blue-100 bg-opacity-30'}`}
+                key={expense.id}
+              >
+                <td className="py-3 px-2">{expense.date}</td>
+                <td className="py-3 px-2">{expense.merchant_name}</td>
+                <td className="py-3 px-2">&euro; {expense.amount}</td>
+                <td className="py-3 px-2">{expense.category}</td>
+                {/* TODO: optimize resize */}
+                <td className="py-3 px-2">
+                  {!!attachmentUrl ? (
+                    <Link
+                      href={attachmentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {attachmentIsImage ? (
+                        <Image
+                          width={0}
+                          height={0}
+                          src={attachmentUrl}
+                          alt="expense attachment"
+                          className="w-32 h-auto max-h-20 object-cover"
+                        />
+                      ) : (
+                        <span className="underline">Preview not available</span>
+                      )}
+                    </Link>
+                  ) : (
+                    'No attachment'
+                  )}
+                </td>
+                <td className="py-3 px-2">
                   <Link
-                    href={attachmentUrl}
-                    target="_blank"
-                    rel="noopened noreferrer"
+                    href={`/expense/edit/${expense.id}`}
+                    className="underline"
                   >
-                    Open in new tab (preview not available)
+                    Edit
                   </Link>
-                ) : (
-                  'No attachment'
-                )}
-              </td>
-              <td>
-                <Link href={`/expense/edit/${expense.id}`}>Edit</Link>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
