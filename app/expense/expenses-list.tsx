@@ -39,22 +39,22 @@ export default async function ExpensesList({ userId }: { userId: string }) {
       <table className="w-full" style={{ minWidth: '40rem' }}>
         <thead className="sticky t-12">
           <tr className="bg-blue-700 text-white text-left">
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Date
             </th>
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Merchant
             </th>
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Amount
             </th>
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Category
             </th>
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Attachment
             </th>
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Edit
             </th>
           </tr>
