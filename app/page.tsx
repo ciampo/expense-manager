@@ -49,7 +49,6 @@ export default async function Home() {
           Add expense
         </Link>
       </div>
-      {/* TODO: use suspense */}
       <ExpensesList userId={data.user.id} />
     </section>
   );
