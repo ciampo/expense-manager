@@ -1,10 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-
-import { logout } from './lib/actions';
 
 import './globals.css';
 
@@ -94,10 +91,8 @@ export default async function RootLayout({
             >
               <p>{data.user.email}</p>
 
-              <form>
-                <button className="text-base underline" formAction={logout}>
-                  Logout
-                </button>
+              <form action="/auth/signout" method="post">
+                <button className="text-base underline">Logout</button>
               </form>
             </div>
           </>
