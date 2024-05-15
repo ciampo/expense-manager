@@ -37,11 +37,11 @@ export default async function RootLayout({
         ) : (
           <>
             <nav className="fixed w-full top-0">
-              <ul className="h-12 border-b border-b-blue-900 px-2 flex items-stretch bg-blue-800 text-white">
+              <ul className="h-12 border-b border-b-blue-900 px-2 flex items-stretch bg-blue-700 text-white">
                 <li className="flex items-stretch mr-auto">
                   <Link
                     href="/"
-                    className="-ml-4 px-4 flex gap-2 items-center text-base underline-offset-2 hover:bg-blue-700 hover:underline focus:bg-blue-700 focus:underline focus:outline-none"
+                    className="-ml-4 px-4 flex gap-2 items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
                   >
                     <Image
                       src="/logo.svg"
@@ -57,7 +57,7 @@ export default async function RootLayout({
                 <li className="flex items-stretch">
                   <Link
                     href="/report"
-                    className="px-4 flex items-center text-base underline-offset-2 hover:bg-blue-700 hover:underline focus:bg-blue-700 focus:underline focus:outline-none"
+                    className="px-4 flex items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
                   >
                     Report
                   </Link>
@@ -65,7 +65,7 @@ export default async function RootLayout({
                 <li className="flex items-stretch">
                   <Link
                     href="/expense/new"
-                    className="px-4 flex items-center text-base underline-offset-2 hover:bg-blue-700 hover:underline focus:bg-blue-700 focus:underline focus:outline-none"
+                    className="px-4 flex items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
                   >
                     Add expense
                   </Link>
@@ -73,7 +73,7 @@ export default async function RootLayout({
                 <li className="flex items-stretch">
                   <button
                     type="button"
-                    className="-mr-2 px-4 flex items-center text-base underline-offset-2 hover:bg-blue-700 hover:underline focus:bg-blue-700 focus:underline focus:outline-none"
+                    className="-mr-2 px-4 flex items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
                     // @ts-expect-error
                     popovertarget="popover-profile"
                   >
@@ -85,7 +85,7 @@ export default async function RootLayout({
             <main className="pt-12 min-h-dvh px-2">{children}</main>
             <div
               id="popover-profile"
-              className="fixed inset-auto top-12 right-0 p-3 bg-white text-blue-800"
+              className="fixed inset-auto top-12 right-0 p-3 bg-white text-blue-700"
               // @ts-expect-error
               popover=""
             >
