@@ -24,6 +24,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 // It's safe to trust getUser() because it sends a request to the Supabase
 // Auth server every time to revalidate the Auth token.
 
+const PUBLIC_ROUTES = ['/', '/login', '/signup'];
+
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -77,8 +79,16 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // Refresh the auth token
-  await supabase.auth.getUser();
+  // Refresh the auth token and get user info
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  // Protect private routes
+  if (
+    (!userData.user || userError) &&
+    !PUBLIC_ROUTES.includes(request.nextUrl.pathname)
+  ) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
 
   return response;
 }

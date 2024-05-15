@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { login } from '../lib/actions';
+import { login } from './actions';
 
 export default function LoginPage() {
   // Use a Server Action to call the Supabase login function.
@@ -28,6 +28,11 @@ export default function LoginPage() {
           Sign up
         </Link>
         .
+      </p>
+      <p className="text-sm">
+        <Link href={'/'} className="underline">
+          Go home.
+        </Link>
       </p>
     </main>
   );
