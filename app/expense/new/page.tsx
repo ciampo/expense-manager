@@ -177,7 +177,7 @@ export default function NewExpensePage() {
         <input id="user_id" name="user_id" type="hidden" value={userId} />
 
         <button
-          className="mt-4 p-1 border-2 disabled:opacity-20"
+          className="mt-4 p-1 border-2 disabled:bg-slate-800 disabled:opacity-50 disabled:no-underline"
           type="submit"
           disabled={isUploading}
         >

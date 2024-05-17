@@ -371,7 +371,7 @@ export default function Page({ params }: { params: { expenseId: string } }) {
                     }
                   }}
                   type="button"
-                  className="mt-4 p-1 border-2 disabled:opacity-20"
+                  className="mt-4 p-1 border-2 disabled:bg-slate-800 disabled:opacity-50 disabled:no-underline"
                   disabled={!attachmentInputValue}
                 >
                   Remove attachment
@@ -381,7 +381,7 @@ export default function Page({ params }: { params: { expenseId: string } }) {
           </p>
 
           <button
-            className="mt-4 p-1 border-2 disabled:opacity-20"
+            className="mt-4 p-1 border-2 disabled:bg-slate-800 disabled:opacity-50 disabled:no-underline"
             type="submit"
             disabled={isUploading}
           >
