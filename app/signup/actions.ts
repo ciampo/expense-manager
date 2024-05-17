@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/utils/supabase/server';
 
-export async function signup(formData: FormData) {
+export async function signup(prevState: any, formData: FormData) {
   const supabase = createClient();
 
   // type-casting here for convenience
@@ -16,13 +16,11 @@ export async function signup(formData: FormData) {
   });
 
   if (error) {
-    console.log(error);
-    throw error;
+    return { message: error.message };
   }
 
   if (!data.user?.identities?.length) {
-    console.log('User already exists');
-    throw new Error('Email already in use. Sign up instead');
+    return { message: 'Email already in use. Sign up instead' };
   }
 
   revalidatePath('/', 'layout');

@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 
-import { login } from './actions';
+import { signup } from './actions';
 
 const initialState = {
   message: '',
@@ -23,8 +23,8 @@ function SubmitButton({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function LoginForm() {
-  const [state, formAction] = useActionState(login, initialState);
+export default function SignupPage() {
+  const [state, formAction] = useActionState(signup, initialState);
 
   return (
     <form
@@ -64,9 +64,8 @@ export default function LoginForm() {
         />
       </div>
       <div className="flex items-center justify-between">
-        <SubmitButton>Sign in</SubmitButton>
+        <SubmitButton>Create an account</SubmitButton>
       </div>
-      <p aria-live="polite">{state?.message}</p>
     </form>
   );
 }
