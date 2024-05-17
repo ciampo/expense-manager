@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/utils/supabase/server';
 
-export async function login(formData: FormData) {
+export async function login(prevState: any, formData: FormData) {
   // Since Supabase is being called from an Action,
   // use the client defined in @/utils/supabase/server.ts.
   const supabase = createClient();
@@ -18,8 +18,7 @@ export async function login(formData: FormData) {
   });
 
   if (error) {
-    console.log(error);
-    throw error;
+    return { message: error.message };
   }
 
   revalidatePath('/', 'layout');
