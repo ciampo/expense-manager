@@ -66,6 +66,7 @@ export default function SignupPage() {
       <div className="flex items-center justify-between">
         <SubmitButton>Create an account</SubmitButton>
       </div>
+      <p aria-live="polite">{state?.message}</p>
     </form>
   );
 }
