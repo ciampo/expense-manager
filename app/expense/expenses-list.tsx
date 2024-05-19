@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { createClient } from '@/utils/supabase/server';
 
+import ExpenseActions from './expense-actions';
 import ExpenseAttachmentPreview from './expense-attachment-preview';
 
 async function fetchExpensesData(userId: string) {
@@ -55,7 +56,7 @@ export default async function ExpensesList({ userId }: { userId: string }) {
               Attachment
             </th>
             <th scope="col" className="p-2 font-medium">
-              Edit
+              Actions
             </th>
           </tr>
         </thead>
@@ -74,12 +75,7 @@ export default async function ExpensesList({ userId }: { userId: string }) {
                 <ExpenseAttachmentPreview attachment={expense.attachment} />
               </td>
               <td className="py-3 px-2">
-                <Link
-                  href={`/expense/edit/${expense.id}`}
-                  className="underline"
-                >
-                  Edit
-                </Link>
+                <ExpenseActions expenseId={expense.id} />
               </td>
             </tr>
           ))}

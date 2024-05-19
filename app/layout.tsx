@@ -92,7 +92,9 @@ export default async function RootLayout({
               <p>{data.user.email}</p>
 
               <form action="/auth/signout" method="post">
-                <button className="text-base underline">Logout</button>
+                <button className="text-base underline" type="submit">
+                  Logout
+                </button>
               </form>
             </div>
           </>
