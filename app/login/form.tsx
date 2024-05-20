@@ -44,6 +44,7 @@ export default function LoginForm() {
           name="email"
           type="email"
           placeholder="user@domain.com"
+          autoComplete="username"
           required
         />
       </div>
@@ -60,6 +61,7 @@ export default function LoginForm() {
           name="password"
           type="password"
           placeholder="**************"
+          autoComplete="current-password"
           required
         />
       </div>

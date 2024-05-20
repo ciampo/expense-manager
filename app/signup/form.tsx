@@ -44,6 +44,7 @@ export default function SignupPage() {
           name="email"
           type="email"
           placeholder="user@domain.com"
+          autoComplete="username"
           required
         />
       </div>
@@ -60,6 +61,7 @@ export default function SignupPage() {
           name="password"
           type="password"
           placeholder="**************"
+          autoComplete="new-password"
           required
         />
       </div>
