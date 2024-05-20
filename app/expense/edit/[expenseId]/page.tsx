@@ -37,11 +37,33 @@ export default async function Page({
     );
   }
 
+  const { data: categoriesData, error: categoriesFetchedError } = await supabase
+    .from('expenses')
+    .select('category')
+    .eq('user_id', user.id);
+
+  if (categoriesFetchedError) {
+    throw new Error(
+      `Error while retrieving expense info. ${categoriesFetchedError.message}`
+    );
+  }
+
+  const uniqueCategories = Array.from(
+    new Set(
+      (categoriesData ?? [])
+        .filter(({ category }) => !!category)
+        .map(({ category }) => category)
+    )
+  ) as string[];
+
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center gap-12">
       <h1 className="text-4xl font-thin">Edit expense</h1>
       <div className="w-full max-w-xs">
-        <EditExpenseForm expenseData={expenseData} />
+        <EditExpenseForm
+          expenseData={expenseData}
+          categories={uniqueCategories}
+        />
       </div>
     </div>
   );

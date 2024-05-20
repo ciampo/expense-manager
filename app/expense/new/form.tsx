@@ -1,16 +1,12 @@
 'use client';
 
-import { useState, useEffect, useActionState, useRef } from 'react';
-
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { createClient } from '@/utils/supabase/client';
-import { Database } from '@/utils/supabase/database.types';
-
-import { updateExpense } from './actions';
+import { createExpense } from './actions';
 
 const initialState = {
   message: '',
@@ -69,23 +65,15 @@ function SubmitButton({ children }: { children: React.ReactNode }) {
 }
 
 export default function EditExpenseForm({
-  expenseData,
   categories,
 }: {
-  expenseData: Database['public']['Tables']['expenses']['Row'];
   categories?: string[];
 }) {
-  const supabase = createClient();
-
-  const [state, formAction] = useActionState(updateExpense, initialState);
-
-  const [removeFetchedExpenseAttachment, setRemoveFetchedExpenseAttachment] =
-    useState(false);
+  const [state, formAction] = useActionState(createExpense, initialState);
   const [attachmentPreviewUrl, setAttachmentPreviewUrl] = useState({
     isImage: false,
     value: '',
   });
-
   const attachmentInputRef = useRef<HTMLInputElement>(null);
   const [attachmentInputValue, setAttachmentInputValue] = useState('');
 
@@ -106,39 +94,13 @@ export default function EditExpenseForm({
         return;
       }
 
-      // Create a preview URL for the attachment of the fetched expense
-      if (!removeFetchedExpenseAttachment && expenseData?.attachment) {
-        const { data, error } = await supabase.storage
-          .from('expenses')
-          .download(expenseData.attachment);
-
-        if (error) {
-          console.error(error.message);
-          return;
-        }
-
-        const url = URL.createObjectURL(data);
-
-        setAttachmentPreviewUrl({
-          isImage: urlIsImage(expenseData.attachment),
-          value: url,
-        });
-
-        return;
-      }
-
       // If none of the above scenarios happened, it means that there isn't
       // any attachment to preview.
       setAttachmentPreviewUrl({ isImage: false, value: '' });
     }
 
     createAttachmentPreview();
-  }, [
-    removeFetchedExpenseAttachment,
-    attachmentInputValue,
-    expenseData?.attachment,
-    supabase,
-  ]);
+  }, [attachmentInputValue]);
 
   return (
     <form
@@ -158,7 +120,6 @@ export default function EditExpenseForm({
           name="date"
           type="date"
           required
-          defaultValue={expenseData?.date ?? ''}
         />
       </div>
 
@@ -176,7 +137,6 @@ export default function EditExpenseForm({
           name="merchant_name"
           required
           placeholder="Merchant name"
-          defaultValue={expenseData?.merchant_name ?? ''}
         />
       </div>
 
@@ -196,7 +156,6 @@ export default function EditExpenseForm({
           name="amount"
           required
           placeholder="Expense amount"
-          defaultValue={expenseData?.amount ?? ''}
         />
       </div>
 
@@ -215,7 +174,6 @@ export default function EditExpenseForm({
           list={categories?.length ? 'category-options' : undefined}
           required
           placeholder="Expense category"
-          defaultValue={expenseData?.category ?? ''}
         />
 
         {categories?.length && (
@@ -230,86 +188,43 @@ export default function EditExpenseForm({
       </div>
 
       <div className="mb-6">
-        {expenseData.attachment && !removeFetchedExpenseAttachment ? (
-          <>
-            <p className="block text-gray-800 text-sm font-semibold mb-2">
-              Attachment
-            </p>
-            <AttachmentPreview
-              url={attachmentPreviewUrl.value}
-              isImage={attachmentPreviewUrl.isImage}
-            >
-              <button
-                onClick={() => setRemoveFetchedExpenseAttachment(true)}
-                type="button"
-                aria-label="Remove attachment"
-                className="absolute right-0 top-0 flex items-center justify-center bg-white border border-black border-solid w-8 h-8"
-              >
-                X
-              </button>
-            </AttachmentPreview>
-          </>
-        ) : (
-          <>
-            <label
-              className="block text-gray-800 text-sm font-semibold mb-2"
-              htmlFor="new_attachment"
-            >
-              Attachment
-            </label>
-            <input
-              className="shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-              name="new_attachment"
-              id="new_attachment"
-              type="file"
-              ref={attachmentInputRef}
-              onChange={(e) => {
-                setAttachmentInputValue(e.target.value);
-              }}
-            />
-            <AttachmentPreview
-              url={attachmentPreviewUrl.value}
-              isImage={attachmentPreviewUrl.isImage}
-              className="mt-2"
-            >
-              <button
-                onClick={() => {
-                  if (attachmentInputRef.current) {
-                    attachmentInputRef.current.value = '';
-                    setAttachmentInputValue('');
-                  }
-                }}
-                type="button"
-                aria-label="Remove attachment"
-                className="absolute right-0 top-0 flex items-center justify-center bg-white border border-black border-solid w-8 h-8"
-                disabled={!attachmentInputValue}
-              >
-                X
-              </button>
-            </AttachmentPreview>
-          </>
-        )}
+        <label
+          className="block text-gray-800 text-sm font-semibold mb-2"
+          htmlFor="attachment"
+        >
+          Attachment
+        </label>
+        <input
+          className="shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+          name="attachment"
+          id="attachment"
+          type="file"
+          ref={attachmentInputRef}
+          onChange={(e) => setAttachmentInputValue(e.target.value)}
+        />
+        <AttachmentPreview
+          url={attachmentPreviewUrl.value}
+          isImage={attachmentPreviewUrl.isImage}
+          className="mt-2"
+        >
+          <button
+            onClick={() => {
+              if (attachmentInputRef.current) {
+                attachmentInputRef.current.value = '';
+                setAttachmentInputValue('');
+              }
+            }}
+            type="button"
+            aria-label="Remove attachment"
+            className="absolute right-0 top-0 flex items-center justify-center bg-white border border-black border-solid w-8 h-8"
+            disabled={!attachmentInputValue}
+          >
+            X
+          </button>
+        </AttachmentPreview>
       </div>
 
-      {/* Hidden */}
-      <input
-        type="hidden"
-        value={expenseData.attachment ?? ''}
-        id="previous_attachment"
-        name="previous_attachment"
-      />
-      <input
-        type="hidden"
-        value={removeFetchedExpenseAttachment ? 'true' : 'false'}
-        id="remove_original_attachment"
-        name="remove_original_attachment"
-      />
-      <input type="hidden" value={expenseData.id} id="id" name="id" />
-
-      {/* Submit */}
       <SubmitButton>Save</SubmitButton>
-
-      {/* Message */}
       <p aria-live="polite">{state?.message}</p>
     </form>
   );
