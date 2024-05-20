@@ -39,6 +39,7 @@ export async function deleteExpense(prevState: any, formData: FormData) {
     .from('expenses')
     .delete()
     .eq('id', expenseId)
+    .eq('user_id', user.id)
     .select();
 
   if (databaseError) {

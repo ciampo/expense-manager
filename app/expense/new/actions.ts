@@ -65,11 +65,9 @@ export async function createExpense(prevState: any, formData: FormData) {
     };
   }
 
-  const { data, error: databaseError } = await supabase
+  const { error: databaseError } = await supabase
     .from('expenses')
-    .insert({ ...expenseData, attachment: hasNewAttachment ? filePath : null })
-    .select()
-    .single();
+    .insert({ ...expenseData, attachment: hasNewAttachment ? filePath : null });
 
   if (databaseError) {
     return {

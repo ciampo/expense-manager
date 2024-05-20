@@ -72,10 +72,11 @@ export async function updateExpense(prevState: any, formData: FormData) {
     };
   }
 
-  const { data, error: databaseError } = await supabase
+  const { error: databaseError } = await supabase
     .from('expenses')
     .update({ ...expenseData, attachment: hasNewAttachment ? filePath : null })
-    .eq('id', expenseId);
+    .eq('id', expenseId)
+    .eq('user_id', user.id);
 
   if (databaseError) {
     return {

@@ -22,7 +22,8 @@ export default async function Page({
     .from('expenses')
     .select('*')
     .eq('user_id', user.id)
-    .eq('id', params.expenseId);
+    .eq('id', params.expenseId)
+    .single();
 
   if (expenseFetchError) {
     throw new Error(
@@ -30,12 +31,16 @@ export default async function Page({
     );
   }
 
+  if (!expenseData) {
+    throw new Error(
+      `Error while retrieving expense info. ${params.expenseId} couldn't be found`
+    );
+  }
+
   return (
     <div>
       <h1>Edit existing expense</h1>
-      {expenseData?.length > 0 ? (
-        <EditExpenseForm expenseData={expenseData[0]} />
-      ) : null}
+      <EditExpenseForm expenseData={expenseData} />
     </div>
   );
 }
