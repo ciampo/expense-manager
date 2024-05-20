@@ -22,26 +22,35 @@ const urlIsImage = (url: string) =>
 const AttachmentPreview = ({
   url,
   isImage,
+  children,
+  className,
 }: {
   url?: string;
   isImage: boolean;
+  children: React.ReactNode;
+  className?: string;
 }) => {
   if (!url) {
     return null;
   }
 
-  return isImage ? (
-    <Image
-      width={0}
-      height={0}
-      src={url}
-      alt="expense attachment"
-      className="w-12 h-auto"
-    />
-  ) : (
-    <Link href={url} target="_blank" rel="noopened noreferrer">
-      Open in new tab (preview not available)
-    </Link>
+  return (
+    <div className={`relative w-full ${className}`}>
+      {isImage ? (
+        <Image
+          width={0}
+          height={0}
+          src={url}
+          alt="expense attachment"
+          className="w-full h-auto"
+        />
+      ) : (
+        <Link href={url} target="_blank" rel="noopener noreferrer">
+          Open in new tab (preview not available)
+        </Link>
+      )}
+      {children}
+    </div>
   );
 };
 
@@ -130,49 +139,54 @@ export default function EditExpenseForm({
   ]);
 
   return (
-    <form action={formAction}>
-      <input type="hidden" value={expenseData.id} id="id" name="id" />
-
-      <input
-        type="hidden"
-        value={expenseData.attachment ?? ''}
-        id="previous_attachment"
-        name="previous_attachment"
-      />
-
-      <input
-        type="hidden"
-        value={removeFetchedExpenseAttachment ? 'true' : 'false'}
-        id="remove_original_attachment"
-        name="remove_original_attachment"
-      />
-
-      <p>
-        <label htmlFor="date">Date</label>
+    <form
+      className="bg-white shadow-md rounded px-8 py-6 mb-4"
+      action={formAction}
+    >
+      <div className="mb-4">
+        <label
+          className="block text-gray-800 text-sm font-semibold mb-2"
+          htmlFor="date"
+        >
+          Date
+        </label>
         <input
+          className="shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
           id="date"
           name="date"
           type="date"
           required
           defaultValue={expenseData?.date ?? ''}
         />
-      </p>
+      </div>
 
-      <p>
-        {/* Pre-populate with existing merchants? */}
-        <label htmlFor="merchant_name">Merchant</label>
+      {/* TODO: use datalist to auto-suggest existing merchants? */}
+      <div className="mb-4">
+        <label
+          className="block text-gray-800 text-sm font-semibold mb-2"
+          htmlFor="merchant_name"
+        >
+          Merchant
+        </label>
         <input
+          className="shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
           id="merchant_name"
           name="merchant_name"
           required
           placeholder="Merchant name"
           defaultValue={expenseData?.merchant_name ?? ''}
         />
-      </p>
+      </div>
 
-      <p>
-        <label htmlFor="amount">Amount</label>
+      <div className="mb-4">
+        <label
+          className="block text-gray-800 text-sm font-semibold mb-2"
+          htmlFor="amount"
+        >
+          Amount
+        </label>
         <input
+          className="shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
           type="number"
           min="0.01"
           step="0.01"
@@ -182,15 +196,21 @@ export default function EditExpenseForm({
           placeholder="Expense amount"
           defaultValue={expenseData?.amount ?? ''}
         />
-      </p>
+      </div>
 
-      <p>
-        {/* Allow a new category + existing ones? */}
+      {/* Allow a new category + existing ones? */}
+      <div className="mb-4">
         {/* Store existing cats to an array */}
-        <label htmlFor="category">Category</label>
+        <label
+          className="block text-gray-800 text-sm font-semibold mb-2"
+          htmlFor="category"
+        >
+          Category
+        </label>
         {/* Conditional loading to make defaultValue work on select */}
         {expenseData?.category ? (
           <select
+            className="shadow border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
             name="category"
             id="category"
             required
@@ -206,27 +226,38 @@ export default function EditExpenseForm({
             ))}
           </select>
         ) : null}
-      </p>
+      </div>
 
-      <p>
+      <div className="mb-4">
         {expenseData.attachment && !removeFetchedExpenseAttachment ? (
           <>
-            Attachment
+            <p className="block text-gray-800 text-sm font-semibold mb-2">
+              Attachment
+            </p>
             <AttachmentPreview
               url={attachmentPreviewUrl.value}
               isImage={attachmentPreviewUrl.isImage}
-            />
-            <button
-              onClick={() => setRemoveFetchedExpenseAttachment(true)}
-              type="button"
             >
-              Remove attachment
-            </button>
+              <button
+                onClick={() => setRemoveFetchedExpenseAttachment(true)}
+                type="button"
+                aria-label="Remove attachment"
+                className="absolute right-0 top-0 flex items-center justify-center bg-white border border-black border-solid w-8 h-8"
+              >
+                X
+              </button>
+            </AttachmentPreview>
           </>
         ) : (
           <>
-            <label htmlFor="attachment">Attachment</label>
+            <label
+              className="block text-gray-800 text-sm font-semibold mb-2"
+              htmlFor="attachment"
+            >
+              Attachment
+            </label>
             <input
+              className="shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
               name="attachment"
               id="attachment"
               type="file"
@@ -236,25 +267,46 @@ export default function EditExpenseForm({
             <AttachmentPreview
               url={attachmentPreviewUrl.value}
               isImage={attachmentPreviewUrl.isImage}
-            />
-            <button
-              onClick={() => {
-                if (attachmentInputRef.current) {
-                  attachmentInputRef.current.value = '';
-                  setAttachmentInputValue('');
-                }
-              }}
-              type="button"
-              className="mt-4 p-1 border-2 disabled:bg-slate-800 disabled:opacity-50 disabled:no-underline"
-              disabled={!attachmentInputValue}
+              className="mt-2"
             >
-              Remove attachment
-            </button>
+              <button
+                onClick={() => {
+                  if (attachmentInputRef.current) {
+                    attachmentInputRef.current.value = '';
+                    setAttachmentInputValue('');
+                  }
+                }}
+                type="button"
+                aria-label="Remove attachment"
+                className="absolute right-0 top-0 flex items-center justify-center bg-white border border-black border-solid w-8 h-8"
+                disabled={!attachmentInputValue}
+              >
+                X
+              </button>
+            </AttachmentPreview>
           </>
         )}
-      </p>
+      </div>
 
+      {/* Hidden */}
+      <input
+        type="hidden"
+        value={expenseData.attachment ?? ''}
+        id="previous_attachment"
+        name="previous_attachment"
+      />
+      <input
+        type="hidden"
+        value={removeFetchedExpenseAttachment ? 'true' : 'false'}
+        id="remove_original_attachment"
+        name="remove_original_attachment"
+      />
+      <input type="hidden" value={expenseData.id} id="id" name="id" />
+
+      {/* Submit */}
       <SubmitButton>Save</SubmitButton>
+
+      {/* Message */}
       <p aria-live="polite">{state?.message}</p>
     </form>
   );
