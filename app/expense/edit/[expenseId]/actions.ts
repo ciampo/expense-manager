@@ -34,36 +34,40 @@ export async function updateExpense(prevState: any, formData: FormData) {
   }
 
   let attachmentUploadError;
-  let filePath;
+  let newAttachmentStoragePath = null;
 
-  const expenseData = {
+  const newAttachmentFile = formData.get(
+    'new_attachment'
+  ) as ExpenseData['attachment'];
+  const previousAttachmentStoragePath = formData.get('previous_attachment') as
+    | string
+    | null;
+  const shouldRemoveOriginalAttachment =
+    formData.get('remove_original_attachment') === 'true';
+
+  const editedExpenseData = {
     date: formData.get('date') as ExpenseData['date'],
     merchant_name: formData.get(
       'merchant_name'
     ) as ExpenseData['merchant_name'],
     amount: formData.get('amount') as ExpenseData['amount'],
     category: formData.get('category') as ExpenseData['category'],
-    attachment: formData.get('attachment') as ExpenseData['attachment'],
     user_id: user.id as ExpenseData['user_id'],
   };
 
-  console.log('UPDATE EXPENSE', expenseData);
-
-  let hasNewAttachment = false;
   if (
-    expenseData.attachment &&
-    expenseData.attachment.size > 0 &&
-    expenseData.attachment.name.length > 0
+    newAttachmentFile &&
+    newAttachmentFile.size > 0 &&
+    newAttachmentFile.name.length > 0
   ) {
-    const fileExt = expenseData.attachment.name.split('.').pop();
-    filePath = `${user.id}/${Math.random()}.${fileExt}`;
+    const fileExt = newAttachmentFile.name.split('.').pop();
+    newAttachmentStoragePath = `${user.id}/${Math.random()}.${fileExt}`;
 
     const { error } = await supabase.storage
       .from('expenses')
-      .upload(filePath, expenseData.attachment);
+      .upload(newAttachmentStoragePath, newAttachmentFile);
 
     attachmentUploadError = error;
-    hasNewAttachment = true;
   }
 
   if (attachmentUploadError) {
@@ -72,9 +76,21 @@ export async function updateExpense(prevState: any, formData: FormData) {
     };
   }
 
+  const updatedExpenseData = {
+    ...editedExpenseData,
+    attachment: shouldRemoveOriginalAttachment
+      ? newAttachmentStoragePath
+      : // if !shouldRemoveOriginalAttachment, one possibility
+        // is that there was not a previous attachment, and that the
+        // user simply specified a new image.
+        newAttachmentStoragePath ?? previousAttachmentStoragePath,
+  };
+
+  console.log('UPDATE EXPENSE', updatedExpenseData);
+
   const { error: databaseError } = await supabase
     .from('expenses')
-    .update({ ...expenseData, attachment: hasNewAttachment ? filePath : null })
+    .update(updatedExpenseData)
     .eq('id', expenseId)
     .eq('user_id', user.id);
 
@@ -84,27 +100,18 @@ export async function updateExpense(prevState: any, formData: FormData) {
     };
   }
 
-  const previousAttachment = formData.get('previous_attachment') as
-    | string
-    | null;
-  const shouldRemoveOriginalAttachment =
-    formData.get('remove_original_attachment') === 'true';
-
   // if needed, delete the previous image
-  // - previousAttachment is true if the original expense had an attachment
-  // - expenseData.attachment is defined if the user deleted
-  if (previousAttachment && shouldRemoveOriginalAttachment) {
+  // - previousAttachmentStoragePath is true if the original expense had an attachment
+  // - editedExpenseData.attachment is defined if the user deleted
+  if (previousAttachmentStoragePath && shouldRemoveOriginalAttachment) {
     const { error: removePreviousAttachmentError } = await supabase.storage
       .from('expenses')
-      .remove([previousAttachment]);
+      .remove([previousAttachmentStoragePath]);
 
     if (removePreviousAttachmentError) {
       return {
         message: `Error while deleting previous attachment from storage. ${removePreviousAttachmentError?.message}`,
       };
-    } else {
-      // Setting to null to remove attachment from database
-      filePath ??= null;
     }
   }
 

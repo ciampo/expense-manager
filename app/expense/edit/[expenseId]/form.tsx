@@ -208,27 +208,23 @@ export default function EditExpenseForm({
           Category
         </label>
         {/* Conditional loading to make defaultValue work on select */}
-        {expenseData?.category ? (
-          <select
-            className="shadow border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-            name="category"
-            id="category"
-            required
-            defaultValue={expenseData.category}
-          >
-            <option value="" hidden>
-              Expense category
+        <select
+          className="shadow border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+          name="category"
+          id="category"
+          required
+          defaultValue={expenseData.category!}
+        >
+          <option value="">Expense category</option>
+          {['coworking', 'test'].map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
             </option>
-            {['coworking', 'test'].map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        ) : null}
+          ))}
+        </select>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-6">
         {expenseData.attachment && !removeFetchedExpenseAttachment ? (
           <>
             <p className="block text-gray-800 text-sm font-semibold mb-2">
@@ -252,17 +248,19 @@ export default function EditExpenseForm({
           <>
             <label
               className="block text-gray-800 text-sm font-semibold mb-2"
-              htmlFor="attachment"
+              htmlFor="new_attachment"
             >
               Attachment
             </label>
             <input
               className="shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-              name="attachment"
-              id="attachment"
+              name="new_attachment"
+              id="new_attachment"
               type="file"
               ref={attachmentInputRef}
-              onChange={(e) => setAttachmentInputValue(e.target.value)}
+              onChange={(e) => {
+                setAttachmentInputValue(e.target.value);
+              }}
             />
             <AttachmentPreview
               url={attachmentPreviewUrl.value}
