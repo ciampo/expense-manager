@@ -63,7 +63,7 @@ export default async function ExpensesList({ userId }: { userId: string }) {
         <tbody>
           {expensesData.map((expense, i) => (
             <tr
-              className={`border-b border-b-blue-900 ${i % 2 === 0 && 'bg-blue-100 bg-opacity-30'}`}
+              className={`border-b border-b-blue-900 bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'}`}
               key={expense.id}
             >
               <td className="py-3 px-2">{expense.date}</td>
