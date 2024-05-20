@@ -18,7 +18,8 @@ async function fetchExpensesData(userId: string) {
   const { data: expenseData, error: expenseError } = await supabase
     .from('expenses')
     .select('*')
-    .eq('user_id', userData.user.id);
+    .eq('user_id', userData.user.id)
+    .order('date');
 
   if (expenseError) {
     throw new Error(expenseError.message);
