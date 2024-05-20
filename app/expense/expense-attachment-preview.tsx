@@ -82,7 +82,11 @@ export default function ExpenseAttachmentPreview({
           className="w-32 h-auto max-h-20 object-cover"
         />
       ) : (
-        <span className="underline">Preview not available</span>
+        <span className="underline">
+          Open in new tab
+          <br />
+          (preview not available)
+        </span>
       )}
     </Link>
   );

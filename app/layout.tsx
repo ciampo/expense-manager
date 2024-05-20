@@ -33,7 +33,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className="font-sans">
         {!isLoggedIn ? (
-          <main className="min-h-dvh">{children}</main>
+          <>{children}</>
         ) : (
           <>
             <nav className="fixed w-full top-0">

@@ -5,7 +5,7 @@ import LoginForm from './form';
 export default function LoginPage() {
   return (
     <main className="min-h-dvh flex flex-col items-center justify-center gap-12">
-      <h1 className="text-4xl font-thin ">Sign in to Expense Manager</h1>
+      <h1 className="text-4xl font-thin">Sign in to Expense Manager</h1>
 
       <div className="w-full max-w-xs">
         <LoginForm />
