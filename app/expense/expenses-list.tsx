@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { createClient } from '@/utils/supabase/server';
 
+import ExpenseActions from './expense-actions';
 import ExpenseAttachmentPreview from './expense-attachment-preview';
 
 async function fetchExpensesData(userId: string) {
@@ -17,7 +18,8 @@ async function fetchExpensesData(userId: string) {
   const { data: expenseData, error: expenseError } = await supabase
     .from('expenses')
     .select('*')
-    .eq('user_id', userData.user.id);
+    .eq('user_id', userData.user.id)
+    .order('date');
 
   if (expenseError) {
     throw new Error(expenseError.message);
@@ -39,30 +41,30 @@ export default async function ExpensesList({ userId }: { userId: string }) {
       <table className="w-full" style={{ minWidth: '40rem' }}>
         <thead className="sticky t-12">
           <tr className="bg-blue-700 text-white text-left">
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Date
             </th>
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Merchant
             </th>
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Amount
             </th>
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Category
             </th>
-            <th scope="col" className="p-2">
+            <th scope="col" className="p-2 font-medium">
               Attachment
             </th>
-            <th scope="col" className="p-2">
-              Edit
+            <th scope="col" className="p-2 font-medium">
+              Actions
             </th>
           </tr>
         </thead>
         <tbody>
           {expensesData.map((expense, i) => (
             <tr
-              className={`border-b border-b-blue-900 ${i % 2 === 0 && 'bg-blue-100 bg-opacity-30'}`}
+              className={`border-b border-b-blue-900 bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'}`}
               key={expense.id}
             >
               <td className="py-3 px-2">{expense.date}</td>
@@ -74,12 +76,7 @@ export default async function ExpensesList({ userId }: { userId: string }) {
                 <ExpenseAttachmentPreview attachment={expense.attachment} />
               </td>
               <td className="py-3 px-2">
-                <Link
-                  href={`/expense/edit/${expense.id}`}
-                  className="underline"
-                >
-                  Edit
-                </Link>
+                <ExpenseActions expenseId={expense.id} />
               </td>
             </tr>
           ))}

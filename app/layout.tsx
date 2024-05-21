@@ -33,7 +33,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className="font-sans">
         {!isLoggedIn ? (
-          <main className="min-h-dvh">{children}</main>
+          <>{children}</>
         ) : (
           <>
             <nav className="fixed w-full top-0">
@@ -85,14 +85,16 @@ export default async function RootLayout({
             <main className="pt-12 min-h-dvh px-2">{children}</main>
             <div
               id="popover-profile"
-              className="fixed inset-auto top-12 right-0 p-3 bg-white text-blue-700"
+              className="fixed inset-auto top-12 right-0 p-3 bg-white text-blue-700 rounded shadow"
               // @ts-expect-error
               popover=""
             >
-              <p>{data.user.email}</p>
+              <p className="mb-2">{data.user.email}</p>
 
               <form action="/auth/signout" method="post">
-                <button className="text-base underline">Logout</button>
+                <button className="text-base underline" type="submit">
+                  Logout
+                </button>
               </form>
             </div>
           </>

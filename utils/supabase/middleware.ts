@@ -25,6 +25,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 // Auth server every time to revalidate the Auth token.
 
 const PUBLIC_ROUTES = ['/', '/login', '/signup'];
+const LOGGED_OUT_ONLY_ROUTES = ['/login', '/signup'];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
@@ -86,6 +87,15 @@ export async function updateSession(request: NextRequest) {
   if (
     (!userData.user || userError) &&
     !PUBLIC_ROUTES.includes(request.nextUrl.pathname)
+  ) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  // Certain pages are only accessible to logged-out users.
+  if (
+    userData.user &&
+    !userError &&
+    LOGGED_OUT_ONLY_ROUTES.includes(request.nextUrl.pathname)
   ) {
     return NextResponse.redirect(new URL('/', request.url));
   }
