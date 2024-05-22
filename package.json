@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "types:db:generate": "npx supabase gen types typescript --project-id [SUPABASE_PROJECT_ID] > database.types.ts"
+    "types:db:generate": "npx supabase gen types typescript --project-id [SUPABASE_PROJECT_ID] > database.types.ts",
+    "test": "npm run test:e2e",
+    "test:e2e": "npm run build && npx playwright test"
   },
   "dependencies": {
     "@supabase/ssr": "^0.3.0",
@@ -17,6 +19,7 @@
     "react-dom": "19.0.0-beta-04b058868c-20240508"
   },
   "devDependencies": {
+    "@playwright/test": "^1.44.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
