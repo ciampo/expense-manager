@@ -37,7 +37,7 @@ export default async function RootLayout({
         ) : (
           <>
             <nav className="fixed w-full top-0">
-              <ul className="h-12 border-b border-b-blue-900 px-2 flex items-stretch bg-blue-700 text-white">
+              <ul className="h-12 border-b border-b-blue-900 px-4 md:px-8 flex items-stretch bg-blue-700 text-white">
                 <li className="flex items-stretch mr-auto">
                   <Link
                     href="/"
@@ -73,7 +73,7 @@ export default async function RootLayout({
                 <li className="flex items-stretch">
                   <button
                     type="button"
-                    className="-mr-2 px-4 flex items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
+                    className="-mr-4 px-4 flex items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
                     // @ts-expect-error
                     popovertarget="popover-profile"
                   >
@@ -82,7 +82,7 @@ export default async function RootLayout({
                 </li>
               </ul>
             </nav>
-            <main className="pt-12 min-h-dvh px-2">{children}</main>
+            <main className="pt-12 min-h-dvh px-4 md:px-8">{children}</main>
             <div
               id="popover-profile"
               className="fixed inset-auto top-12 right-0 p-3 bg-white text-blue-700 rounded shadow"

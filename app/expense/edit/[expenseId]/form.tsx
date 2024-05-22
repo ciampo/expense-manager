@@ -35,7 +35,7 @@ const AttachmentPreview = ({
   }
 
   return (
-    <div className={`relative w-full ${className}`}>
+    <div className={`relative w-full border border-slate-300 ${className}`}>
       {isImage ? (
         <Image
           width={0}
