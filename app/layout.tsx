@@ -51,7 +51,20 @@ export default async function RootLayout({
                       height={32}
                       priority
                     />
-                    Expense manager
+                    <span className="sr-only sm:not-sr-only">
+                      Expense manager
+                    </span>
+                  </Link>
+                </li>
+                <li className="flex items-stretch">
+                  <Link
+                    href="/expense/new"
+                    className="px-4 flex items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
+                  >
+                    Add
+                    <span className="sr-only sm:not-sr-only">
+                      &nbsp;expense
+                    </span>
                   </Link>
                 </li>
                 <li className="flex items-stretch">
@@ -60,14 +73,6 @@ export default async function RootLayout({
                     className="px-4 flex items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
                   >
                     Report
-                  </Link>
-                </li>
-                <li className="flex items-stretch">
-                  <Link
-                    href="/expense/new"
-                    className="px-4 flex items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
-                  >
-                    Add expense
                   </Link>
                 </li>
                 <li className="flex items-stretch">
