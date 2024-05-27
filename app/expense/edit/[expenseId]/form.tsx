@@ -162,6 +162,8 @@ export default function EditExpenseForm({
     }
   };
 
+  const today = new Date();
+
   return (
     <form
       className="bg-white shadow-md rounded px-8 py-6 mb-4"
@@ -181,7 +183,10 @@ export default function EditExpenseForm({
           name="date"
           type="date"
           required
-          defaultValue={expenseData?.date ?? ''}
+          defaultValue={
+            expenseData?.date ??
+            `${today.getFullYear()}-${('' + (today.getMonth() + 1)).padStart(2, '0')}-${today.getDate()}`
+          }
         />
       </div>
 
