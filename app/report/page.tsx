@@ -1,11 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 
-// TODO:
-// 2. Allow downloading attachments:
-//   - Download multiple via set timeout (https://hyunbinseo.medium.com/download-multiple-files-with-javascript-and-anchor-element-20f89f500ab2)
-//   - Download multiple with multi-download package (https://github.com/sindresorhus/multi-download)
-//   - Create zip on the fly (https://stackoverflow.com/questions/56244902/how-in-js-to-download-more-than-10-files-in-browser-including-firefox)
-//   - Produce bash script (current solution)
+import AttachmentsButton from './attachmentDownloadButton';
 
 const MONTH_NAMES = [
   'January',
@@ -21,6 +16,26 @@ const MONTH_NAMES = [
   'November',
   'December',
 ];
+
+function DownloadIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      className="w-4 h-4"
+      role="presentation"
+    >
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        d="M12 3v13m0 0 4-4.38M12 16l-4-4.38M15 21H9c-2.83 0-4.24 0-5.12-.88C3 19.24 3 17.82 3 15m18 0c0 2.83 0 4.24-.88 5.12-.3.3-.66.5-1.12.63"
+      />
+    </svg>
+  );
+}
 
 export default async function ReportPage() {
   const supabase = createClient();
@@ -64,6 +79,8 @@ export default async function ReportPage() {
     count: number;
     csvFilename: string;
     csvData: string;
+    dateStart: Date;
+    dateEnd: Date;
   };
   const aggregatedData = allExpensesByMonthData.map(
     ({ count, month: dbStringDate }) => {
@@ -85,7 +102,7 @@ export default async function ReportPage() {
 
       const thisMonthDateFormatted = `${MONTH_NAMES[thisMonthMonth]} ${thisMonthYear}`;
 
-      const filteredExpenseData = expenseSummaryData.filter(({ date }) => {
+      const thisMonthExpenseData = expenseSummaryData.filter(({ date }) => {
         if (!date) {
           return false;
         }
@@ -95,7 +112,7 @@ export default async function ReportPage() {
         return expenseDate >= thisMonthDate && expenseDate < nextMonthDate;
       });
 
-      const csvData = `data:text/csv;charset=utf-8,${MONTH_NAMES[thisMonthMonth]}\ngiorno,descrizione,aliquota,imponibile,imposta,imponibile,imposta,totale spese documentate\n${filteredExpenseData
+      const csvData = `data:text/csv;charset=utf-8,${MONTH_NAMES[thisMonthMonth]}\ngiorno,descrizione,aliquota,imponibile,imposta,imponibile,imposta,totale spese documentate\n${thisMonthExpenseData
         .map(({ date, category, total_amount }) => {
           if (!date || !category || !total_amount) {
             return;
@@ -117,6 +134,8 @@ export default async function ReportPage() {
       return {
         id: dbStringDate,
         dateFormatted: thisMonthDateFormatted,
+        dateStart: thisMonthDate,
+        dateEnd: nextMonthDate,
         count,
         csvFilename: `${thisMonthYear}-${`${thisMonthMonth + 1}`.padStart(2, '0')}-expense-report.csv`,
         csvData,
@@ -135,21 +154,30 @@ export default async function ReportPage() {
           {aggregatedData.map((e, i) =>
             e === null ? null : (
               <li
-                className={`border-t first:border-none border-t-slate-400 bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'} px-4 py-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between`}
+                className={`border-t first:border-none border-t-slate-400 bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'} px-4 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between`}
                 key={e.id}
               >
-                <p className="flex flex-row items-center gap-2 md:flex-col md:items-start">
+                <p className="flex flex-row items-center gap-2 sm:flex-col sm:items-start">
                   <span className="font-medium text-lg">{e.dateFormatted}</span>
                   <span>[{e.count} expenses]</span>
                 </p>
-                <div>
+                <div className="flex gap-2">
                   <a
                     href={encodeURI(e.csvData)}
+                    aria-label="Download CSV"
                     download={e.csvFilename}
-                    className="inline-block rounded px-4 py-1 bg-white text-blue-700 border border-current underline-offset-2 hover:bg-blue-100 hover:underline focus:bg-blue-100 focus:underline focus:outline-none focus:shadow-outline"
+                    className="inline-flex items-center gap-2 rounded px-4 py-1 bg-white text-blue-700 border border-current underline-offset-2 hover:bg-blue-100 hover:underline focus:bg-blue-100 focus:underline focus:outline-none focus:shadow-outline"
                   >
-                    Download CSV
+                    <DownloadIcon /> CSV
                   </a>
+                  <AttachmentsButton
+                    userId={user.id}
+                    dateStart={e.dateStart}
+                    dateEnd={e.dateEnd}
+                    ariaLabel="Download attachments"
+                  >
+                    <DownloadIcon /> Attachments
+                  </AttachmentsButton>
                 </div>
               </li>
             )

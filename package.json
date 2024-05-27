@@ -12,11 +12,14 @@
   "dependencies": {
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.42.0",
+    "@zip.js/zip.js": "^2.7.44",
+    "mime-types": "^2.1.35",
     "next": "14.3.0-canary.68",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508"
   },
   "devDependencies": {
+    "@types/mime-types": "^2.1.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
