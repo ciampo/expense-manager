@@ -88,7 +88,6 @@ export default async function RootLayout({
             <div
               id="popover-profile"
               className="fixed inset-auto top-12 right-0 p-3 bg-white text-blue-700 rounded shadow"
-              // @ts-expect-error
               popover=""
             >
               <p className="mb-2">{data.user.email}</p>
