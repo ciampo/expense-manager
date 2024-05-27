@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import ExpensesList from './expense/expenses-list';
+import { AuthSessionMissingError } from '@supabase/supabase-js';
 
 export default async function Home() {
   const supabase = createClient();
@@ -32,7 +33,9 @@ export default async function Home() {
               Log In
             </Link>
           </p>
-          {error ? <p>{error.message}</p> : null}
+          {error && !(error instanceof AuthSessionMissingError) ? (
+            <p>{error.message}</p>
+          ) : null}
         </div>
       </div>
     );
@@ -46,7 +49,8 @@ export default async function Home() {
           className="inline-block rounded px-4 py-2 bg-blue-700 text-white underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none focus:shadow-outline"
           href="/expense/new"
         >
-          Add expense
+          Add
+          <span className="sr-only sm:not-sr-only">&nbsp;expense</span>
         </Link>
       </div>
       <ExpensesList userId={data.user.id} />

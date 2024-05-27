@@ -26,9 +26,6 @@ export default async function RootLayout({
 
   const isLoggedIn = !error && data?.user;
 
-  // ERROR missing sub claim
-  // see https://github.com/supabase/supabase-js/issues/992
-
   return (
     <html lang="en">
       <body className="font-sans">
