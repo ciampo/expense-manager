@@ -37,22 +37,31 @@ export default async function Page({
     );
   }
 
-  const { data: categoriesData, error: categoriesFetchedError } = await supabase
-    .from('expenses')
-    .select('category')
-    .eq('user_id', user.id);
+  const { data: existingExpensesData, error: existingExpensesFetchError } =
+    await supabase
+      .from('expenses')
+      .select('category, merchant_name')
+      .eq('user_id', user.id);
 
-  if (categoriesFetchedError) {
+  if (existingExpensesFetchError) {
     throw new Error(
-      `Error while retrieving expense info. ${categoriesFetchedError.message}`
+      `Error while retrieving expense info. ${existingExpensesFetchError.message}`
     );
   }
 
   const uniqueCategories = Array.from(
     new Set(
-      (categoriesData ?? [])
+      (existingExpensesData ?? [])
         .filter(({ category }) => !!category)
         .map(({ category }) => category)
+    )
+  ) as string[];
+
+  const uniqueMerchants = Array.from(
+    new Set(
+      (existingExpensesData ?? [])
+        .filter(({ merchant_name }) => !!merchant_name)
+        .map(({ merchant_name }) => merchant_name)
     )
   ) as string[];
 
@@ -63,6 +72,7 @@ export default async function Page({
         <EditExpenseForm
           expenseData={expenseData}
           categories={uniqueCategories}
+          merchants={uniqueMerchants}
         />
       </div>
     </div>

@@ -71,9 +71,11 @@ function SubmitButton({ children }: { children: React.ReactNode }) {
 export default function EditExpenseForm({
   expenseData,
   categories,
+  merchants,
 }: {
   expenseData: Database['public']['Tables']['expenses']['Row'];
   categories?: string[];
+  merchants?: string[];
 }) {
   const supabase = createClient();
 
@@ -162,7 +164,6 @@ export default function EditExpenseForm({
         />
       </div>
 
-      {/* TODO: use datalist to auto-suggest existing merchants? */}
       <div className="mb-4">
         <label
           className="block text-gray-800 text-sm font-semibold mb-2"
@@ -174,10 +175,21 @@ export default function EditExpenseForm({
           className="shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
           id="merchant_name"
           name="merchant_name"
+          list={categories?.length ? 'merchants-options' : undefined}
           required
           placeholder="Merchant name"
           defaultValue={expenseData?.merchant_name ?? ''}
         />
+
+        {merchants?.length && (
+          <datalist id="merchants-options">
+            {merchants.map((mer) => (
+              <option key={mer} value={mer}>
+                {mer}
+              </option>
+            ))}
+          </datalist>
+        )}
       </div>
 
       <div className="mb-4">
