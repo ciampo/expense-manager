@@ -8,6 +8,9 @@ import Link from 'next/link';
 
 import { createExpense } from './actions';
 
+// 5 MB
+const FILE_SIZE_LIMIT = 5 * 1024 * 1024;
+
 const initialState = {
   message: '',
 };
@@ -71,6 +74,7 @@ export default function EditExpenseForm({
   categories?: string[];
   merchants?: string[];
 }) {
+  const [inputValidationError, setInputValidationError] = useState<string>();
   const [state, formAction] = useActionState(createExpense, initialState);
   const [attachmentPreviewUrl, setAttachmentPreviewUrl] = useState({
     isImage: false,
@@ -104,10 +108,27 @@ export default function EditExpenseForm({
     createAttachmentPreview();
   }, [attachmentInputValue]);
 
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    if (!(e.target instanceof HTMLFormElement)) {
+      setInputValidationError(undefined);
+      return;
+    }
+
+    const fd = new FormData(e.target);
+    const attachment = fd.get('attachment');
+    if (attachment instanceof File && attachment.size >= FILE_SIZE_LIMIT) {
+      e.preventDefault();
+      setInputValidationError('File upload size limit exceeded (5MB).');
+    } else {
+      setInputValidationError(undefined);
+    }
+  };
+
   return (
     <form
       className="bg-white shadow-md rounded px-8 py-6 mb-4"
       action={formAction}
+      onSubmit={onSubmit}
     >
       <div className="mb-4">
         <label
@@ -237,7 +258,10 @@ export default function EditExpenseForm({
       </div>
 
       <SubmitButton>Save</SubmitButton>
-      <p aria-live="polite">{state?.message}</p>
+      <p aria-live="polite">
+        {inputValidationError}
+        {state?.message}
+      </p>
     </form>
   );
 }
