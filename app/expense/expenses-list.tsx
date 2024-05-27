@@ -37,7 +37,7 @@ export default async function ExpensesList({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto bg-white shadow-md rounded">
       <table className="w-full" style={{ minWidth: '40rem' }}>
         <thead className="sticky t-12">
           <tr className="bg-blue-700 text-white text-left">
@@ -64,7 +64,7 @@ export default async function ExpensesList({ userId }: { userId: string }) {
         <tbody>
           {expensesData.map((expense, i) => (
             <tr
-              className={`border-b border-b-blue-900 bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'}`}
+              className={`border-t border-t-slate-400 bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'}`}
               key={expense.id}
             >
               <td className="py-3 px-2">{expense.date}</td>

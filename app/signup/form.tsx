@@ -34,7 +34,7 @@ export default function SignupPage() {
       <div className="mb-4">
         <label
           className="block text-gray-800 text-sm font-semibold mb-2"
-          htmlFor="username"
+          htmlFor="email"
         >
           Email
         </label>

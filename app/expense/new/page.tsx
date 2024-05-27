@@ -14,30 +14,42 @@ export default async function NewExpensePage() {
     throw new Error(`Error while retrieving user info. ${userError?.message}`);
   }
 
-  const { data: categoriesData, error: categoriesFetchedError } = await supabase
-    .from('expenses')
-    .select('category')
-    .eq('user_id', user.id);
+  const { data: existingExpensesData, error: existingExpensesFetchError } =
+    await supabase
+      .from('expenses')
+      .select('category, merchant_name')
+      .eq('user_id', user.id);
 
-  if (categoriesFetchedError) {
+  if (existingExpensesFetchError) {
     throw new Error(
-      `Error while retrieving expense info. ${categoriesFetchedError.message}`
+      `Error while retrieving expense info. ${existingExpensesFetchError.message}`
     );
   }
 
   const uniqueCategories = Array.from(
     new Set(
-      (categoriesData ?? [])
+      (existingExpensesData ?? [])
         .filter(({ category }) => !!category)
         .map(({ category }) => category)
     )
   ) as string[];
 
+  const uniqueMerchants = Array.from(
+    new Set(
+      (existingExpensesData ?? [])
+        .filter(({ merchant_name }) => !!merchant_name)
+        .map(({ merchant_name }) => merchant_name)
+    )
+  ) as string[];
+
   return (
-    <div className="min-h-dvh flex flex-col items-center justify-center gap-12">
+    <div className="min-h-dvh -mt-12 flex flex-col items-center justify-center gap-12">
       <h1 className="text-4xl font-thin">Add a new expense</h1>
       <div className="w-full max-w-xs">
-        <AddExpenseForm categories={uniqueCategories} />
+        <AddExpenseForm
+          categories={uniqueCategories}
+          merchants={uniqueMerchants}
+        />
       </div>
     </div>
   );

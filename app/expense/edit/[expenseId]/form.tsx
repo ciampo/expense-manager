@@ -12,6 +12,9 @@ import { Database } from '@/utils/supabase/database.types';
 
 import { updateExpense } from './actions';
 
+// 5 MB
+const FILE_SIZE_LIMIT = 5 * 1024 * 1024;
+
 const initialState = {
   message: '',
 };
@@ -35,7 +38,7 @@ const AttachmentPreview = ({
   }
 
   return (
-    <div className={`relative w-full ${className}`}>
+    <div className={`relative w-full border border-slate-300 ${className}`}>
       {isImage ? (
         <Image
           width={0}
@@ -71,12 +74,15 @@ function SubmitButton({ children }: { children: React.ReactNode }) {
 export default function EditExpenseForm({
   expenseData,
   categories,
+  merchants,
 }: {
   expenseData: Database['public']['Tables']['expenses']['Row'];
   categories?: string[];
+  merchants?: string[];
 }) {
   const supabase = createClient();
 
+  const [inputValidationError, setInputValidationError] = useState<string>();
   const [state, formAction] = useActionState(updateExpense, initialState);
 
   const [removeFetchedExpenseAttachment, setRemoveFetchedExpenseAttachment] =
@@ -140,10 +146,29 @@ export default function EditExpenseForm({
     supabase,
   ]);
 
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    if (!(e.target instanceof HTMLFormElement)) {
+      setInputValidationError(undefined);
+      return;
+    }
+
+    const fd = new FormData(e.target);
+    const attachment = fd.get('attachment');
+    if (attachment instanceof File && attachment.size >= FILE_SIZE_LIMIT) {
+      e.preventDefault();
+      setInputValidationError('File upload size limit exceeded (5MB).');
+    } else {
+      setInputValidationError(undefined);
+    }
+  };
+
+  const today = new Date();
+
   return (
     <form
       className="bg-white shadow-md rounded px-8 py-6 mb-4"
       action={formAction}
+      onSubmit={onSubmit}
     >
       <div className="mb-4">
         <label
@@ -158,11 +183,13 @@ export default function EditExpenseForm({
           name="date"
           type="date"
           required
-          defaultValue={expenseData?.date ?? ''}
+          defaultValue={
+            expenseData?.date ??
+            `${today.getFullYear()}-${('' + (today.getMonth() + 1)).padStart(2, '0')}-${today.getDate()}`
+          }
         />
       </div>
 
-      {/* TODO: use datalist to auto-suggest existing merchants? */}
       <div className="mb-4">
         <label
           className="block text-gray-800 text-sm font-semibold mb-2"
@@ -174,10 +201,21 @@ export default function EditExpenseForm({
           className="shadow appearance-none border border-gray-500 rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
           id="merchant_name"
           name="merchant_name"
+          list={categories?.length ? 'merchants-options' : undefined}
           required
           placeholder="Merchant name"
           defaultValue={expenseData?.merchant_name ?? ''}
         />
+
+        {merchants?.length && (
+          <datalist id="merchants-options">
+            {merchants.map((mer) => (
+              <option key={mer} value={mer}>
+                {mer}
+              </option>
+            ))}
+          </datalist>
+        )}
       </div>
 
       <div className="mb-4">
