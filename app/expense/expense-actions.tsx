@@ -14,7 +14,7 @@ const initialState = {
 function SubmitButton({ children }: { children: React.ReactNode }) {
   const { pending } = useFormStatus();
   return (
-    <button disabled={pending} className="underline disabled:opacity-20">
+    <button type="submit" disabled={pending} className="underline text-red-700">
       {children}
     </button>
   );
@@ -25,7 +25,23 @@ export default function ExpenseActions({ expenseId }: { expenseId: number }) {
 
   return (
     <>
-      <Link href={`/expense/edit/${expenseId}`} className="underline">
+      <Link
+        href={`/expense/edit/${expenseId}`}
+        className="underline"
+        onClick={(e) => {
+          if (!(e.target instanceof Element)) {
+            return;
+          }
+
+          const disabledButton = e.target.parentElement?.querySelector(
+            'button[type="submit"][disabled]'
+          );
+
+          if (disabledButton) {
+            e.preventDefault();
+          }
+        }}
+      >
         Edit
       </Link>
       <form

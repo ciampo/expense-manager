@@ -39,6 +39,12 @@ input, select {
   }
 }
 
+.expense-row {
+  &:has(button[disabled]) {
+    opacity: 0.2;
+}
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
