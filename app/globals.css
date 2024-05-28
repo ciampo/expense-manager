@@ -32,6 +32,11 @@ body {
 input, select {
   background: inherit;
   border: 1px solid currentColor;
+  height: 40px;
+
+  &[type="file"] {
+    height: initial;
+  }
 }
 
 @layer utilities {
