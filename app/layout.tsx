@@ -73,31 +73,16 @@ export default async function RootLayout({
                   </Link>
                 </li>
                 <li className="flex items-stretch">
-                  <button
-                    type="button"
+                  <Link
+                    href="/profile"
                     className="-mr-4 px-4 flex items-center text-base underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none"
-                    // @ts-expect-error
-                    popovertarget="popover-profile"
                   >
                     Profile
-                  </button>
+                  </Link>
                 </li>
               </ul>
             </nav>
             <main className="pt-12 min-h-dvh px-4 md:px-8">{children}</main>
-            <div
-              id="popover-profile"
-              className="fixed inset-auto top-12 right-0 p-3 bg-white text-blue-700 rounded shadow"
-              popover=""
-            >
-              <p className="mb-2">{data.user.email}</p>
-
-              <form action="/auth/signout" method="post">
-                <button className="text-base underline" type="submit">
-                  Logout
-                </button>
-              </form>
-            </div>
           </>
         )}
       </body>
