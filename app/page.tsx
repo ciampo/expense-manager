@@ -42,7 +42,7 @@ export default async function Home() {
   }
 
   return (
-    <section className="max-w-screen-lg mx-auto pt-8">
+    <section className="max-w-screen-lg mx-auto pt-8 relative overflow-hidden">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-blue-800 text-3xl">Dashboard</h1>
         <Link
