@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 
 import ExpenseActions from './expense-actions';
 import ExpenseAttachmentPreview from './expense-attachment-preview';
+import { Database } from '@/utils/supabase/database.types';
 
 async function fetchExpensesData(userId: string) {
   const supabase = createClient();
@@ -12,7 +13,6 @@ async function fetchExpensesData(userId: string) {
 
   if (userError) {
     throw new Error(userError.message);
-    return;
   }
 
   const { data: expenseData, error: expenseError } = await supabase
@@ -23,7 +23,6 @@ async function fetchExpensesData(userId: string) {
 
   if (expenseError) {
     throw new Error(expenseError.message);
-    return;
   }
 
   return expenseData;
@@ -64,7 +63,7 @@ export default async function ExpensesList({ userId }: { userId: string }) {
         <tbody>
           {expensesData.map((expense, i) => (
             <tr
-              className={`border-t border-t-slate-400 bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'}`}
+              className={`expense-row border-t border-t-slate-400 bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'}`}
               key={expense.id}
             >
               <td className="py-3 px-2">{expense.date}</td>

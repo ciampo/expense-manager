@@ -33,7 +33,7 @@ export async function deleteExpense(prevState: any, formData: FormData) {
     };
   }
 
-  console.log('UPDATE EXPENSE', expenseId);
+  console.log('DELETE EXPENSE', expenseId);
 
   const { data: deletedExpenseData, error: databaseError } = await supabase
     .from('expenses')
@@ -44,7 +44,7 @@ export async function deleteExpense(prevState: any, formData: FormData) {
 
   if (databaseError) {
     return {
-      message: `Error while adding expense to the database. ${databaseError?.message}`,
+      message: `Error while deleting expense from the database. ${databaseError?.message}`,
     };
   }
 

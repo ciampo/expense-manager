@@ -32,6 +32,17 @@ body {
 input, select {
   background: inherit;
   border: 1px solid currentColor;
+  height: 40px;
+
+  &[type="file"] {
+    height: initial;
+  }
+}
+
+.expense-row {
+  &:has(button[disabled]) {
+    opacity: 0.2;
+}
 }
 
 @layer utilities {

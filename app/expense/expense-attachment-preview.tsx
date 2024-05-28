@@ -9,6 +9,30 @@ import type { Database } from '@/utils/supabase/database.types';
 
 import { createClient } from '@/utils/supabase/client';
 
+const eyeSvg = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="w-6 h-6"
+    role="presentation"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeWidth="2"
+      d="M12 3c-7.41 0-9 1.59-9 9s1.59 9 9 9 9-1.59 9-9"
+    />
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M20.5 3.5 15 9m1-6h4.67c.18 0 .33.15.33.33V8"
+    />
+  </svg>
+);
+
 function urlHasImageExtension(url: string) {
   return /\.(gif|jpe?g|tiff?|png|webp|bmp|heic)$/i.test(url);
 }
@@ -55,37 +79,29 @@ export default function ExpenseAttachmentPreview({
 
   if (!previewUrl) {
     return (
-      <span className="block min-w-40">
+      <span>
         <span className="sr-only">
           {!attachment ? 'No attachment' : 'Loading attachment'}
         </span>
-        <span aria-hidden="true">
-          {!attachment ? '—' : 'Loading preview...'}
-        </span>
+        <span aria-hidden="true">{!attachment ? '—' : '...'}</span>
       </span>
     );
   }
 
   return (
-    <Link
-      href={previewUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block min-w-40"
-    >
+    <Link href={previewUrl} target="_blank" rel="noopener noreferrer">
       {urlHasImageExtension(attachment!) ? (
         <Image
           width={0}
           height={0}
           src={previewUrl}
-          alt="expense attachment"
-          className="w-32 h-auto max-h-20 object-cover"
+          alt="expense attachment preview"
+          className="w-20 h-20 object-cover rounded"
         />
       ) : (
-        <span className="underline">
-          Open in new tab
-          <br />
-          (preview not available)
+        <span>
+          <span className="sr-only">Open preview in new tab</span>
+          {eyeSvg}
         </span>
       )}
     </Link>
