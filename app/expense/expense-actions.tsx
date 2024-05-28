@@ -14,7 +14,7 @@ const initialState = {
 function SubmitButton({ children }: { children: React.ReactNode }) {
   const { pending } = useFormStatus();
   return (
-    <button disabled={pending} className="underline">
+    <button disabled={pending} className="underline disabled:opacity-20">
       {children}
     </button>
   );
