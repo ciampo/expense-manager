@@ -165,7 +165,7 @@ export default function EditExpenseForm({
           placeholder="Merchant name"
         />
 
-        {merchants?.length && (
+        {merchants && merchants.length > 0 && (
           <datalist id="merchants-options">
             {merchants.map((mer) => (
               <option key={mer} value={mer}>
@@ -212,7 +212,7 @@ export default function EditExpenseForm({
           placeholder="Expense category"
         />
 
-        {categories?.length && (
+        {categories && categories.length > 0 && (
           <datalist id="category-options">
             {categories.map((cat) => (
               <option key={cat} value={cat}>

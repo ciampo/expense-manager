@@ -1,5 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 
+import DeleteProfileForm from './delete-profile-form';
+
 export default async function ProfilePage() {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
@@ -23,6 +25,10 @@ export default async function ProfilePage() {
         <dt>Email</dt>
         <dd>{data.user.email}</dd>
       </dl>
+
+      <div className="mt-8">
+        <DeleteProfileForm />
+      </div>
     </section>
   );
 }
