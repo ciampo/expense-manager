@@ -13,7 +13,7 @@ export default async function Home() {
   if (error || !data?.user) {
     return (
       <div className="min-h-dvh flex flex-col items-center gap-8 justify-center">
-        <h1 className="text-5xl flex flex-col items-center gap-2">
+        <h1 className="text-5xl flex flex-col items-center gap-2 text-center">
           <Image src="/logo.svg" alt="" width={96} height={96} priority />
           Expense manager
         </h1>

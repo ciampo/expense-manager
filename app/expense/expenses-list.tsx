@@ -38,7 +38,7 @@ export default async function ExpensesList({ userId }: { userId: string }) {
   return (
     <div className="w-full overflow-x-auto bg-white shadow-md rounded">
       <table className="w-full" style={{ minWidth: '40rem' }}>
-        <thead className="sticky t-12">
+        <thead>
           <tr className="bg-blue-700 text-white text-left">
             <th scope="col" className="p-2 font-medium">
               Date
@@ -52,9 +52,9 @@ export default async function ExpensesList({ userId }: { userId: string }) {
             <th scope="col" className="p-2 font-medium">
               Category
             </th>
-            <th scope="col" className="p-2 font-medium">
+            {/* <th scope="col" className="p-2 font-medium">
               Attachment
-            </th>
+            </th> */}
             <th scope="col" className="p-2 font-medium">
               Actions
             </th>
@@ -70,10 +70,10 @@ export default async function ExpensesList({ userId }: { userId: string }) {
               <td className="py-3 px-2">{expense.merchant_name}</td>
               <td className="py-3 px-2">&euro; {expense.amount}</td>
               <td className="py-3 px-2">{expense.category}</td>
-              {/* TODO: optimize resize */}
-              <td className="py-3 px-2">
+              {/* TODO: open preview dialog instead */}
+              {/* <td className="py-3 px-2">
                 <ExpenseAttachmentPreview attachment={expense.attachment} />
-              </td>
+              </td> */}
               <td className="py-3 px-2">
                 <ExpenseActions expenseId={expense.id} />
               </td>

@@ -144,7 +144,7 @@ export default function EditExpenseForm({
           id="date"
           name="date"
           type="date"
-          defaultValue={`${today.getFullYear()}-${('' + (today.getMonth() + 1)).padStart(2, '0')}-${today.getDate()}`}
+          defaultValue={`${today.getFullYear()}-${('' + (today.getMonth() + 1)).padStart(2, '0')}-${('' + today.getDate()).padStart(2, '0')}`}
           required
         />
       </div>

@@ -90,7 +90,7 @@ export default function ExpenseAttachmentPreview({
 
   return (
     <Link href={previewUrl} target="_blank" rel="noopener noreferrer">
-      {urlHasImageExtension(attachment!) ? (
+      {/* {urlHasImageExtension(attachment!) ? (
         <Image
           width={0}
           height={0}
@@ -98,12 +98,12 @@ export default function ExpenseAttachmentPreview({
           alt="expense attachment preview"
           className="w-20 h-20 object-cover rounded"
         />
-      ) : (
-        <span>
-          <span className="sr-only">Open preview in new tab</span>
-          {eyeSvg}
-        </span>
-      )}
+      ) : ( */}
+      <span>
+        <span className="sr-only">Open preview in new tab</span>
+        {eyeSvg}
+      </span>
+      {/* )} */}
     </Link>
   );
 }
