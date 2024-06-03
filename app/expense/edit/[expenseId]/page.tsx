@@ -66,8 +66,8 @@ export default async function Page({
   ) as string[];
 
   return (
-    <div className="min-h-dvh -mt-12 flex flex-col items-center justify-center gap-12">
-      <h1 className="text-4xl font-thin">Edit expense</h1>
+    <div className="pt-8 flex flex-col items-center justify-center gap-12">
+      <h1 className="text-blue-800 text-3xl text-center">Edit expense</h1>
       <div className="w-full max-w-xs">
         <EditExpenseForm
           expenseData={expenseData}

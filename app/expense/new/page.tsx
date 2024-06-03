@@ -43,8 +43,8 @@ export default async function NewExpensePage() {
   ) as string[];
 
   return (
-    <div className="min-h-dvh -mt-12 flex flex-col items-center justify-center gap-12">
-      <h1 className="text-4xl font-thin">Add expense</h1>
+    <div className="pt-8 flex flex-col items-center justify-center gap-12">
+      <h1 className="text-blue-800 text-3xl text-center">Add expense</h1>
       <div className="w-full max-w-xs">
         <AddExpenseForm
           categories={uniqueCategories}

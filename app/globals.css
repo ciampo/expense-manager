@@ -37,6 +37,10 @@ input, select {
   &[type="file"] {
     height: initial;
   }
+
+  &:user-invalid {
+    border: 1px solid red !important;
+  }
 }
 
 .expense-row {
