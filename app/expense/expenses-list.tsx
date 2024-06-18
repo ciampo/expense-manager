@@ -1,10 +1,18 @@
-import Link from 'next/link';
-
 import { createClient } from '@/utils/supabase/server';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+// TODO: pagination / virtualisation
+// TODO: split by month?
+// TODO: multi selection?
 
 import ExpenseActions from './expense-actions';
-import ExpenseAttachmentPreview from './expense-attachment-preview';
-import { Database } from '@/utils/supabase/database.types';
 
 async function fetchExpensesData(userId: string) {
   const supabase = createClient();
@@ -19,7 +27,7 @@ async function fetchExpensesData(userId: string) {
     .from('expenses')
     .select('*')
     .eq('user_id', userData.user.id)
-    .order('date');
+    .order('date', { ascending: false });
 
   if (expenseError) {
     throw new Error(expenseError.message);
@@ -36,51 +44,58 @@ export default async function ExpensesList({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="w-full overflow-x-auto bg-white shadow-md rounded">
-      <table className="w-full" style={{ minWidth: '40rem' }}>
-        <thead>
-          <tr className="bg-blue-700 text-white text-left">
-            <th scope="col" className="p-2 font-medium">
+    <div className="w-full overflow-x-auto bg-white shadow-md rounded border">
+      <Table className="w-full" style={{ minWidth: '40rem' }}>
+        <TableHeader>
+          <TableRow className="bg-accent text-left">
+            <TableHead className="p-2 font-medium w-[112px] text-accent-foreground">
               Date
-            </th>
-            <th scope="col" className="p-2 font-medium">
+            </TableHead>
+            <TableHead className="p-2 font-medium text-accent-foreground">
               Merchant
-            </th>
-            <th scope="col" className="p-2 font-medium">
+            </TableHead>
+            <TableHead className="p-2 font-medium w-[80px] text-accent-foreground">
               Amount
-            </th>
-            <th scope="col" className="p-2 font-medium">
+            </TableHead>
+            <TableHead className="p-2 font-medium w-[140px] text-accent-foreground">
               Category
-            </th>
-            {/* <th scope="col" className="p-2 font-medium">
+            </TableHead>
+            {/* <TableHead className="p-2 font-medium">
               Attachment
-            </th> */}
-            <th scope="col" className="p-2 font-medium">
+            </TableHead> */}
+            <TableHead className="p-2 font-medium w-[80px] text-accent-foreground">
               Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {expensesData.map((expense, i) => (
-            <tr
-              className={`expense-row border-t border-t-slate-400 bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'}`}
+            <TableRow
+              className={`expense-row bg-opacity-30 ${i % 2 === 0 ? 'bg-blue-100' : 'bg-white'}`}
               key={expense.id}
             >
-              <td className="py-3 px-2">{expense.date}</td>
-              <td className="py-3 px-2">{expense.merchant_name}</td>
-              <td className="py-3 px-2">&euro; {expense.amount}</td>
-              <td className="py-3 px-2">{expense.category}</td>
+              <TableCell className="py-3 px-2">{expense.date}</TableCell>
+              <TableCell className="py-3 px-2">
+                {expense.merchant_name}
+              </TableCell>
+              <TableCell className="py-3 px-2 text-right font-mono">
+                &euro;{' '}
+                {(expense.amount ?? 0).toLocaleString('en', {
+                  minimumFractionDigits: 2,
+                })}
+              </TableCell>
+              <TableCell className="py-3 px-2">{expense.category}</TableCell>
               {/* TODO: open preview dialog instead */}
-              {/* <td className="py-3 px-2">
+              {/* <TableCell className="py-3 px-2">
                 <ExpenseAttachmentPreview attachment={expense.attachment} />
-              </td> */}
-              <td className="py-3 px-2">
+              </TableCell> */}
+              <TableCell className="py-3 px-2">
                 <ExpenseActions expenseId={expense.id} />
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }
