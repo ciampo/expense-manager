@@ -67,7 +67,7 @@ export default async function Page({
 
   return (
     <div className="pt-8 flex flex-col items-center justify-center gap-12">
-      <h1 className="text-blue-800 text-3xl text-center">Edit expense</h1>
+      <h1 className="text-3xl text-center">Edit expense</h1>
       <div className="w-full max-w-xs">
         <EditExpenseForm
           expenseData={expenseData}

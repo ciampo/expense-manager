@@ -5,6 +5,8 @@ import { useFormStatus } from 'react-dom';
 
 import Link from 'next/link';
 
+import { Button } from '@/components/ui/button';
+
 import { deleteExpense } from './actions';
 
 const initialState = {
@@ -14,9 +16,15 @@ const initialState = {
 function SubmitButton({ children }: { children: React.ReactNode }) {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="underline text-red-700">
+    <Button
+      type="submit"
+      disabled={pending}
+      variant="ghost-destructive"
+      size="sm"
+      className="underline"
+    >
       {children}
-    </button>
+    </Button>
   );
 }
 
@@ -25,25 +33,27 @@ export default function ExpenseActions({ expenseId }: { expenseId: number }) {
 
   return (
     <>
-      <Link
-        href={`/expense/edit/${expenseId}`}
-        className="underline"
-        onClick={(e) => {
-          if (!(e.target instanceof Element)) {
-            return;
-          }
+      <Button variant="ghost" size="sm" asChild>
+        <Link
+          href={`/expense/edit/${expenseId}`}
+          className="underline"
+          onClick={(e) => {
+            if (!(e.target instanceof Element)) {
+              return;
+            }
 
-          const disabledButton = e.target.parentElement?.querySelector(
-            'button[type="submit"][disabled]'
-          );
+            const disabledButton = e.target.parentElement?.querySelector(
+              'button[type="submit"][disabled]'
+            );
 
-          if (disabledButton) {
-            e.preventDefault();
-          }
-        }}
-      >
-        Edit
-      </Link>
+            if (disabledButton) {
+              e.preventDefault();
+            }
+          }}
+        >
+          Edit
+        </Link>
+      </Button>
       <form
         action={formAction}
         onSubmit={(e) => {
