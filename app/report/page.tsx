@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { Button } from '@/components/ui/button';
 
 import AttachmentsButton from './attachmentDownloadButton';
 
@@ -145,12 +146,12 @@ export default async function ReportPage() {
 
   return (
     <div className="min-h-dvh pt-8 max-w-screen-lg mx-auto">
-      <h1 className="text-blue-800 text-3xl mb-8">Generate reports</h1>
+      <h1 className="text-3xl mb-8">Generate reports</h1>
 
       {aggregatedData.length === 0 ? (
         <p>No expense data available</p>
       ) : (
-        <ul className="w-full bg-white shadow-md rounded border border-blue-800">
+        <ul className="w-full bg-white shadow-md rounded border">
           {aggregatedData.map((e, i) =>
             e === null ? null : (
               <li
@@ -162,14 +163,16 @@ export default async function ReportPage() {
                   <span>[{e.count} expenses]</span>
                 </p>
                 <div className="flex gap-2">
-                  <a
-                    href={encodeURI(e.csvData)}
-                    aria-label="Download CSV"
-                    download={e.csvFilename}
-                    className="inline-flex items-center gap-2 rounded px-4 py-1 bg-white text-blue-700 border border-current underline-offset-2 hover:bg-blue-100 hover:underline focus:bg-blue-100 focus:underline focus:outline-none focus:shadow-outline"
-                  >
-                    <DownloadIcon /> CSV
-                  </a>
+                  <Button asChild variant="outline">
+                    <a
+                      href={encodeURI(e.csvData)}
+                      aria-label="Download CSV"
+                      download={e.csvFilename}
+                      className="gap-2"
+                    >
+                      <DownloadIcon /> CSV
+                    </a>
+                  </Button>
                   <AttachmentsButton
                     userId={user.id}
                     dateStart={e.dateStart}

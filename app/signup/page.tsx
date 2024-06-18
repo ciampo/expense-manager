@@ -6,7 +6,7 @@ export default function SignupPage() {
   // Use a Server Action to call the Supabase signup function.
   return (
     <main className="min-h-dvh flex flex-col items-center justify-center gap-12">
-      <h1 className="text-blue-800 text-3xl text-center">Create an account</h1>
+      <h1 className="text-3xl text-center">Create an account</h1>
 
       <div className="w-full max-w-xs">
         <SignupForm />

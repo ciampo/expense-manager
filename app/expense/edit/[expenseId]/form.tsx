@@ -9,6 +9,7 @@ import Link from 'next/link';
 
 import { createClient } from '@/utils/supabase/client';
 import { Database } from '@/utils/supabase/database.types';
+import { Button } from '@/components/ui/button';
 
 import { updateExpense } from './actions';
 
@@ -61,13 +62,9 @@ function SubmitButton({ children }: { children: React.ReactNode }) {
   const { pending } = useFormStatus();
 
   return (
-    <button
-      className="rounded px-4 py-2 bg-blue-700 text-white underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none focus:shadow-outline disabled:bg-slate-800 disabled:opacity-50 disabled:no-underline"
-      type="submit"
-      disabled={pending}
-    >
+    <Button type="submit" disabled={pending}>
       {children}
-    </button>
+    </Button>
   );
 }
 

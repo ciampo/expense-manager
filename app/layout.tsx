@@ -34,7 +34,7 @@ export default async function RootLayout({
         ) : (
           <>
             <nav className="fixed w-full top-0 z-50">
-              <ul className="h-12 border-b border-b-blue-900 px-4 md:px-8 flex items-stretch bg-blue-700 text-white">
+              <ul className="h-12 border-b px-4 md:px-8 flex items-stretch bg-accent text-accent-foreground">
                 <li className="flex items-stretch mr-auto">
                   <Link
                     href="/"

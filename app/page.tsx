@@ -3,8 +3,10 @@ import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import ExpensesList from './expense/expenses-list';
 import { AuthSessionMissingError } from '@supabase/supabase-js';
+import { Button } from '@/components/ui/button';
+
+import ExpensesList from './expense/expenses-list';
 
 export default async function Home() {
   const supabase = createClient();
@@ -19,19 +21,13 @@ export default async function Home() {
         </h1>
         <div className="flex flex-col items-center justify-center gap-4">
           <p className="text-base flex gap-4 items-center">
-            <Link
-              href={'/signup'}
-              className="inline-block rounded px-4 py-2 bg-blue-700 text-white underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none focus:shadow-outline"
-            >
-              Sign Up
-            </Link>
+            <Button asChild>
+              <Link href={'/signup'}>Sign Up</Link>
+            </Button>
             <span>or</span>
-            <Link
-              href={'/login'}
-              className="inline-block rounded px-4 py-2 bg-blue-700 text-white underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none focus:shadow-outline"
-            >
-              Log In
-            </Link>
+            <Button asChild>
+              <Link href={'/login'}>Log In</Link>
+            </Button>
           </p>
           {error && !(error instanceof AuthSessionMissingError) ? (
             <p>{error.message}</p>
@@ -44,14 +40,13 @@ export default async function Home() {
   return (
     <section className="max-w-screen-lg mx-auto py-8 relative overflow-hidden">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-blue-800 text-3xl">Dashboard</h1>
-        <Link
-          className="inline-block rounded px-4 py-2 bg-blue-700 text-white underline-offset-2 hover:bg-blue-600 hover:underline focus:bg-blue-600 focus:underline focus:outline-none focus:shadow-outline"
-          href="/expense/new"
-        >
-          Add
-          <span className="sr-only sm:not-sr-only">&nbsp;expense</span>
-        </Link>
+        <h1 className="text-3xl">Dashboard</h1>
+        <Button asChild>
+          <Link href="/expense/new">
+            Add
+            <span className="sr-only sm:not-sr-only">&nbsp;expense</span>
+          </Link>
+        </Button>
       </div>
       <ExpensesList userId={data.user.id} />
     </section>

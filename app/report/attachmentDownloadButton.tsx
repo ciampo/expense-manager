@@ -5,6 +5,7 @@ import { BlobReader, BlobWriter, ZipWriter } from '@zip.js/zip.js';
 import { extension } from 'mime-types';
 
 import { createClient } from '@/utils/supabase/client';
+import { Button } from '@/components/ui/button';
 
 // Allow downloading attachments. Options:
 //   - Download multiple via set timeout (https://hyunbinseo.medium.com/download-multiple-files-with-javascript-and-anchor-element-20f89f500ab2)
@@ -147,13 +148,14 @@ export default function AttachmentsButton({
       No attachments available
     </span>
   ) : (
-    <button
+    <Button
       aria-label={ariaLabel}
       disabled={downloading}
-      className="inline-flex items-center gap-2 rounded px-4 py-1 bg-white text-blue-700 border border-current underline-offset-2 hover:bg-blue-100 hover:underline focus:bg-blue-100 focus:underline focus:outline-none focus:shadow-outline disabled:text-slate-600 disabled:no-underline disabled:bg-white disabled:cursor-progress"
+      variant="outline"
+      className="gap-2"
       onClick={onButtonClick}
     >
       {children}
-    </button>
+    </Button>
   );
 }
