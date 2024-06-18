@@ -28,7 +28,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className="font-sans">
+      <body className="min-h-screen bg-background font-sans antialiased">
         {!isLoggedIn ? (
           <>{children}</>
         ) : (
