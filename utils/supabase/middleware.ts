@@ -24,7 +24,13 @@ import { NextResponse, type NextRequest } from 'next/server';
 // It's safe to trust getUser() because it sends a request to the Supabase
 // Auth server every time to revalidate the Auth token.
 
-const PUBLIC_ROUTES = ['/', '/login', '/signup', '/auth/confirm'];
+const PUBLIC_ROUTES = [
+  '/',
+  '/login',
+  '/signup',
+  '/auth/confirm',
+  '/api/keep-alive',
+];
 const LOGGED_OUT_ONLY_ROUTES = ['/login', '/signup'];
 
 export async function updateSession(request: NextRequest) {
